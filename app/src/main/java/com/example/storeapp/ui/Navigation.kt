@@ -12,6 +12,8 @@ import com.example.storeapp.ui.screens.categoriesdetail.CategoriesDetailScreen
 import com.example.storeapp.ui.screens.categoriesdetail.CategoryDetailViewModel
 import com.example.storeapp.ui.screens.home.HomeScreen
 import com.example.storeapp.ui.screens.home.HomeViewModel
+import com.example.storeapp.ui.screens.productdetail.ProductDetailScreen
+import com.example.storeapp.ui.screens.productdetail.ProductDetailViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,6 +21,9 @@ object Home
 
 @Serializable
 data class CategoryDetail(val category:String)
+
+@Serializable
+data class ProductDetail(val id: Int)
 
 @Composable
 fun Navigation(){
@@ -43,7 +48,18 @@ fun Navigation(){
             CategoriesDetailScreen(category.category,
                 viewModel {
                     vm
-                }) { navController.popBackStack() }
+                },{navController.popBackStack()},{ navController.navigate(route = ProductDetail(it.id)) })
+        }
+        composable<ProductDetail> { backStackEntry ->
+            val product = backStackEntry.toRoute<ProductDetail>()
+            val productRemoteDataService = ProductRemoteDataSource()
+            val productsRepository = ProductsServiceRepository(productRemoteDataService)
+            val vm = ProductDetailViewModel(productsRepository)
+            ProductDetailScreen(viewModel = viewModel {
+                vm
+            }, idProduct = product.id) {
+                navController.popBackStack()
+            }
         }
     }
 }

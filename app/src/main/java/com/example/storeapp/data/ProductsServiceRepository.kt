@@ -30,6 +30,9 @@ class ProductsServiceRepository(
         return productList
     }
 
+    override suspend fun fetchProductById(idProduct: Int): Product =
+        productRemoteDataService.fetchProductById(idProduct).toDomainProduct()
+
     private fun getImage(title: String): Int =
         when (title) {
             Categories.Electronics.title -> R.drawable.electronics

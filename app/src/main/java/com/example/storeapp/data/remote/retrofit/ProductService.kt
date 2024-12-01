@@ -11,4 +11,7 @@ interface ProductService {
 
     @GET("products/category/{title}")
     suspend fun fetchProductsByCategory(@Path("title")categoryTitle: String) : List<ProductResult>
+
+    @GET("products/{id}")
+    suspend fun fetchProductById(@Path("id")productId: Int): ProductResult
 }

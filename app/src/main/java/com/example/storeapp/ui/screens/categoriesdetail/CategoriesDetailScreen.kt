@@ -1,6 +1,7 @@
 package com.example.storeapp.ui.screens.categoriesdetail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -47,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.storeapp.R
 import com.example.storeapp.domain.models.Product
+import com.example.storeapp.ui.screens.AppBarScreenWithIcon
 import com.example.storeapp.ui.theme.colorRating
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +56,8 @@ import com.example.storeapp.ui.theme.colorRating
 fun CategoriesDetailScreen(
     title: String,
     vm: CategoryDetailViewModel,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    onClic: (Product) -> Unit
 ) {
     LaunchedEffect(key1 = Unit) {
         vm.loadProducts(title)
@@ -62,26 +65,7 @@ fun CategoriesDetailScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
-            TopAppBar(
-                colors = TopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    scrolledContainerColor = MaterialTheme.colorScheme.secondary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    actionIconContentColor = MaterialTheme.colorScheme.primary
-                ),
-                title = { Text(text = title.toUpperCase(Locale.current)) },
-                scrollBehavior = scrollBehavior,
-                navigationIcon = {
-                    IconButton(onClick = onBackPressed) {
-                        Icon(
-                            tint = Color.White,
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = stringResource(id = R.string.back)
-                        )
-                    }
-                }
-            )
+           AppBarScreenWithIcon(title = title, scrollBehavior = scrollBehavior,onBackPressed)
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { paddingValues ->
@@ -102,8 +86,8 @@ fun CategoriesDetailScreen(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             contentPadding = paddingValues
         ) {
-            items(state.productList) {
-                ItemCardProduct(product = it)
+            items(state.productList) { p ->
+                ItemCardProduct(product = p, onClic = { onClic(p) })
             }
         }
     }
@@ -111,11 +95,12 @@ fun CategoriesDetailScreen(
 
 
 @Composable
-fun ItemCardProduct(product: Product) {
+fun ItemCardProduct(product: Product, onClic: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable(onClick = onClic),
         elevation = CardDefaults.cardElevation(8.dp),
         shape = RoundedCornerShape(CornerSize(16.dp))
     ) {
@@ -143,22 +128,28 @@ fun ItemCardProduct(product: Product) {
         Row(
             modifier = Modifier.fillMaxSize()
         ) {
-                Icon(imageVector = Icons.Rounded.Star,
-                    tint = colorRating,
-                    contentDescription = stringResource(R.string.star),
-                    modifier = Modifier
-                        .fillMaxHeight())
-                Text(text = product.rating.rate.toString(),
-                    modifier = Modifier
-                        .fillMaxHeight(),
-                )
-                Text(text = "|", modifier = Modifier
+            Icon(
+                imageVector = Icons.Rounded.Star,
+                tint = colorRating,
+                contentDescription = stringResource(R.string.star),
+                modifier = Modifier
                     .fillMaxHeight()
-                    .padding(start = 8.dp, end = 8.dp))
-                Text(text = "${product.rating.count}+ sold",
-                    modifier = Modifier
-                        .fillMaxHeight(),
-                )
+            )
+            Text(
+                text = product.rating.rate.toString(),
+                modifier = Modifier
+                    .fillMaxHeight(),
+            )
+            Text(
+                text = "|", modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(start = 8.dp, end = 8.dp)
+            )
+            Text(
+                text = "${product.rating.count}+ sold",
+                modifier = Modifier
+                    .fillMaxHeight(),
+            )
         }
     }
 }

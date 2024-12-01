@@ -40,6 +40,7 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.example.storeapp.R
 import com.example.storeapp.domain.models.Category
+import com.example.storeapp.ui.screens.AppBarScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,17 +51,7 @@ fun HomeScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
-            TopAppBar(
-                colors = TopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    scrolledContainerColor = MaterialTheme.colorScheme.secondary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    actionIconContentColor = MaterialTheme.colorScheme.primary
-                ),
-                title = { Text(text = stringResource(R.string.categories)) },
-                scrollBehavior = scrollBehavior
-            )
+            AppBarScreen(title = stringResource(id = R.string.categories), scrollBehavior = scrollBehavior)
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { paddingValues ->
