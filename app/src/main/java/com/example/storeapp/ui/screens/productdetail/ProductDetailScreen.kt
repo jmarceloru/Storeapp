@@ -12,15 +12,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.storeapp.R
 import com.example.storeapp.ui.screens.AppBarScreenWithIcon
+import com.example.storeapp.ui.screens.LoadingCircularIndicator
 import com.example.storeapp.ui.theme.colorRating
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,30 +50,29 @@ fun ProductDetailScreen(
     idProduct: Int,
     onBackPressed: () -> Unit
 ) {
-    LaunchedEffect(key1 = Unit) {
+    val productDetailState = RememberProductDetailState()
+    productDetailState.ShowScreen {
         viewModel.fetchProduct(idProduct)
     }
-    val state = viewModel.state
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val state by viewModel.state.collectAsState()
     Scaffold(
         topBar = {
             AppBarScreenWithIcon(
                 title = "PRODUCT",
-                scrollBehavior = scrollBehavior,
+                scrollBehavior = productDetailState.scrollBehavior,
                 onBackPressed = onBackPressed
             )
         },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier.nestedScroll(productDetailState.scrollBehavior.nestedScrollConnection),
+        floatingActionButton = {
+            FloatingActionButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.ShoppingCart,
+                    contentDescription = stringResource(id = R.string.cart))
+            }
+        }
     ) { paddingValues ->
         if (state.loading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+           LoadingCircularIndicator(modifier = Modifier.padding(paddingValues))
         } else {
             Column(
                 modifier = Modifier

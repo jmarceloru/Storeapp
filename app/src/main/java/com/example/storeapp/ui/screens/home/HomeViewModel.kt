@@ -1,25 +1,24 @@
 package com.example.storeapp.ui.screens.home
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.storeapp.data.remote.ProductRemoteDataSource
 import com.example.storeapp.domain.repository.ProductsRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val productsRepository : ProductsRepository
 ) : ViewModel(){
 
-    var state by mutableStateOf(HomeUiState())
-        private set
+    private var _state = MutableStateFlow(HomeUiState())
+    val state: StateFlow<HomeUiState> get() = _state.asStateFlow()
 
     init {
         viewModelScope.launch {
-            state = HomeUiState(loading = true)
-            state = HomeUiState(loading = false, categories = productsRepository.fetchCategories())
+            _state.value = HomeUiState(loading = true)
+            _state.value = HomeUiState(loading = false, categories = productsRepository.fetchCategories())
         }
     }
 }

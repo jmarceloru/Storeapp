@@ -1,11 +1,11 @@
 package com.example.storeapp.ui.screens.categoriesdetail
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.storeapp.domain.repository.ProductsRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 
@@ -13,13 +13,13 @@ class CategoryDetailViewModel(
     private val productsRepository: ProductsRepository
 ) : ViewModel(){
 
-    var state by mutableStateOf(CategoryDetailUiState())
-        private set
+    private var _state = MutableStateFlow(CategoryDetailUiState())
+    val state: StateFlow<CategoryDetailUiState> get() = _state.asStateFlow()
 
     fun loadProducts(category: String){
         viewModelScope.launch {
-            state =  CategoryDetailUiState(true)
-            state = CategoryDetailUiState(false,productsRepository.fetchProductsByCategory(category))
+            _state.value =  CategoryDetailUiState(true)
+            _state.value = CategoryDetailUiState(false,productsRepository.fetchProductsByCategory(category))
         }
     }
 }

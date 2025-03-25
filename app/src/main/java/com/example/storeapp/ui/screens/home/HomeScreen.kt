@@ -24,6 +24,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import com.example.storeapp.R
 import com.example.storeapp.domain.models.Category
 import com.example.storeapp.ui.screens.AppBarScreen
+import com.example.storeapp.ui.screens.LoadingCircularIndicator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,19 +51,20 @@ fun HomeScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
-            AppBarScreen(title = stringResource(id = R.string.categories), scrollBehavior = scrollBehavior)
+            AppBarScreen(
+                title = stringResource(id = R.string.categories),
+                scrollBehavior = scrollBehavior
+            )
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { paddingValues ->
-        val state = homeViewModel.state
-        if (state.loading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
+        val state by homeViewModel.state.collectAsState()
+        state.let {
+            if (it.loading) {
+                LoadingCircularIndicator(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                )
             }
         }
         LazyVerticalGrid(
@@ -68,8 +73,8 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             contentPadding = paddingValues
         ) {
-            items(state.categories) {
-                ItemCardCategory(category = it, onClick = { onClick(it.title) })
+            items(state.categories) { category->
+                ItemCardCategory(category = category, onClick = { onClick(category.title) })
             }
         }
     }
@@ -92,9 +97,11 @@ fun ItemCardCategory(
         shape = RoundedCornerShape(CornerSize(16.dp))
     ) {
         Row {
-            Box(modifier = Modifier
-                .background(Color.White)
-                .padding(8.dp)) {
+            Box(
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(8.dp)
+            ) {
                 CategoryImage(category.image)
             }
             Column(

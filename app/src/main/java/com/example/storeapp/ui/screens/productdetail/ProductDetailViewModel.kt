@@ -1,24 +1,24 @@
 package com.example.storeapp.ui.screens.productdetail
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.storeapp.domain.repository.ProductsRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ProductDetailViewModel(
     private val productsRepository: ProductsRepository
 ): ViewModel() {
 
-    var state by mutableStateOf(ProductDetailUiState())
-        private set
+    private var _state = MutableStateFlow(ProductDetailUiState())
+    val state: StateFlow<ProductDetailUiState> get() = _state.asStateFlow()
 
     fun fetchProduct(idProduct: Int){
         viewModelScope.launch {
-            state = ProductDetailUiState(loading = true)
-            state = ProductDetailUiState(loading = false, productsRepository.fetchProductById(idProduct))
+            _state.value = ProductDetailUiState(loading = true)
+            _state.value = ProductDetailUiState(loading = false, productsRepository.fetchProductById(idProduct))
         }
     }
 }

@@ -71,6 +71,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     //navigation
     implementation(libs.androidx.navigation.compose)
+    //runtime livedata
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

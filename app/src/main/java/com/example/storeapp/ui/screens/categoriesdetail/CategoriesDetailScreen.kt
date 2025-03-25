@@ -27,6 +27,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,6 +46,7 @@ import coil3.compose.AsyncImage
 import com.example.storeapp.R
 import com.example.storeapp.domain.models.Product
 import com.example.storeapp.ui.screens.AppBarScreenWithIcon
+import com.example.storeapp.ui.screens.LoadingCircularIndicator
 import com.example.storeapp.ui.theme.colorRating
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,26 +57,19 @@ fun CategoriesDetailScreen(
     onBackPressed: () -> Unit,
     onClic: (Product) -> Unit
 ) {
-    LaunchedEffect(key1 = Unit) {
+    val categoryDetailState = RememberCategoryDetailState()
+    categoryDetailState.ShowScreen(categoryDetailState.ok) {
         vm.loadProducts(title)
     }
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
-           AppBarScreenWithIcon(title = title, scrollBehavior = scrollBehavior,onBackPressed)
+           AppBarScreenWithIcon(title = title, scrollBehavior = categoryDetailState.scrollBehavior,onBackPressed)
         },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier.nestedScroll(categoryDetailState.scrollBehavior.nestedScrollConnection)
     ) { paddingValues ->
-        val state = vm.state
+        val state by vm.state.collectAsState()
         if (state.loading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+           LoadingCircularIndicator(modifier = Modifier.padding(paddingValues))
         }
         LazyVerticalGrid(
             columns = GridCells.Adaptive(150.dp),

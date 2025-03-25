@@ -13,5 +13,4 @@ class ProductRemoteDataSource : ProductRemoteDataService {
 
     override suspend fun fetchProductById(idProduct: Int): ProductResult =
          ProductClient.instance.fetchProductById(idProduct)
-
 }
