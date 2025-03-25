@@ -22,7 +22,7 @@ class ProductDetailState(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RememberProductDetailState(
+fun rememberProductDetailState(
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 ): ProductDetailState {
     return remember {

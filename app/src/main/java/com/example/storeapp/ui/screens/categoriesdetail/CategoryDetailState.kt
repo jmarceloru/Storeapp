@@ -31,7 +31,7 @@ class CategoryDetailState(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RememberCategoryDetailState(
+fun rememberCategoryDetailState(
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
     ok: MutableState<Boolean> = mutableStateOf(false)
 ): CategoryDetailState {
