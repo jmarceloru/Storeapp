@@ -60,7 +60,7 @@ fun ProductDetailScreen(
         },
         modifier = Modifier.nestedScroll(productDetailState.scrollBehavior.nestedScrollConnection),
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(onClick = { }) {
                 Icon(imageVector = Icons.Default.ShoppingCart,
                     contentDescription = stringResource(id = R.string.cart))
             }
