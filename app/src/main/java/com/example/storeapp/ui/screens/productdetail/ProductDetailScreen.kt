@@ -12,7 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -22,6 +23,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -45,11 +49,11 @@ fun ProductDetailScreen(
     idProduct: Int,
     onBackPressed: () -> Unit
 ) {
+    val state by viewModel.state.collectAsState()
     val productDetailState = rememberProductDetailState()
-    productDetailState.ShowScreen {
+    productDetailState.FetchProductData {
         viewModel.fetchProduct(idProduct)
     }
-    val state by viewModel.state.collectAsState()
     Scaffold(
         topBar = {
             AppBarScreenWithIcon(
@@ -60,14 +64,20 @@ fun ProductDetailScreen(
         },
         modifier = Modifier.nestedScroll(productDetailState.scrollBehavior.nestedScrollConnection),
         floatingActionButton = {
-            FloatingActionButton(onClick = { }) {
-                Icon(imageVector = Icons.Default.ShoppingCart,
-                    contentDescription = stringResource(id = R.string.cart))
+            FloatingActionButton(onClick = { viewModel.onFavoriteClick() }) {
+                Icon(
+                    imageVector = if (state.product.favorite) {
+                        Icons.Default.Favorite
+                    } else {
+                        Icons.Default.FavoriteBorder
+                    },
+                    contentDescription = stringResource(id = R.string.cart)
+                )
             }
         }
     ) { paddingValues ->
         if (state.loading) {
-           LoadingCircularIndicator(modifier = Modifier.padding(paddingValues))
+            LoadingCircularIndicator(modifier = Modifier.padding(paddingValues))
         } else {
             Column(
                 modifier = Modifier

@@ -19,7 +19,9 @@ class CategoryDetailViewModel(
     fun loadProducts(category: String){
         viewModelScope.launch {
             _state.value =  CategoryDetailUiState(true)
-            _state.value = CategoryDetailUiState(false,productsRepository.fetchProductsByCategory(category))
+            productsRepository.fetchProductsByCategory(category).collect{
+                _state.value = CategoryDetailUiState(false,it)
+            }
         }
     }
 }

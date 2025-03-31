@@ -1,7 +1,7 @@
-package com.example.storeapp.data.models
+package com.example.storeapp.data.remote.models
 
-import com.example.storeapp.domain.models.Product
 import kotlinx.serialization.Serializable
+import com.example.storeapp.data.local.entities.Product as ProductEntity
 
 @Serializable
 data class ProductResult(
@@ -14,13 +14,13 @@ data class ProductResult(
     val title: String
 )
 
-fun ProductResult.toDomainProduct(): Product =
-    Product(
+fun ProductResult.toProductEntity(): ProductEntity =
+    ProductEntity(
         this.category,
         this.description,
         this.id,
         this.image,
         this.price,
-        this.rating.toDomainRating(),
+        this.rating.toEntityRating(),
         this.title
     )

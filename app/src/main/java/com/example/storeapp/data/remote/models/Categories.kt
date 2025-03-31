@@ -1,4 +1,4 @@
-package com.example.storeapp.data.models
+package com.example.storeapp.data.remote.models
 
 sealed class Categories(val title:String){
     data object Electronics: Categories("electronics")

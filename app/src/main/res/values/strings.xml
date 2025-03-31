@@ -4,4 +4,5 @@
     <string name="categories">CATEGORIES</string>
     <string name="star">Star</string>
     <string name="cart">cart</string>
+    <string name="favorite">Favorite</string>
 </resources>

@@ -1,6 +1,6 @@
 package com.example.storeapp.data.remote.retrofit
 
-import com.example.storeapp.data.models.ProductResult
+import com.example.storeapp.data.remote.models.ProductResult
 import retrofit2.http.GET
 import retrofit2.http.Path
 

@@ -1,6 +1,6 @@
 package com.example.storeapp.data.remote
 
-import com.example.storeapp.data.models.ProductResult
+import com.example.storeapp.data.remote.models.ProductResult
 
 interface ProductRemoteDataService {
     suspend fun fetchCategories(): List<String>

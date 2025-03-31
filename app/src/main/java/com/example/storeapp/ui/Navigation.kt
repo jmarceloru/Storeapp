@@ -1,12 +1,15 @@
 package com.example.storeapp.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.storeapp.data.ProductsServiceRepository
+import com.example.storeapp.StoreApp
+import com.example.storeapp.data.ProductsRepositoryService
+import com.example.storeapp.data.local.ProductLocalDataSource
 import com.example.storeapp.data.remote.ProductRemoteDataSource
 import com.example.storeapp.ui.screens.categoriesdetail.CategoriesDetailScreen
 import com.example.storeapp.ui.screens.categoriesdetail.CategoryDetailViewModel
@@ -29,10 +32,13 @@ data class ProductDetail(val id: Int)
 fun Navigation(){
     val navController = rememberNavController()
 
+    val app = LocalContext.current.applicationContext as StoreApp
+    val productRemoteDataService = ProductRemoteDataSource()
+    val productLocalDataService = ProductLocalDataSource(app.db.categoryDao(),app.db.productDao())
+
     NavHost(navController = navController, startDestination = Home) {
         composable<Home> {
-            val productRemoteDataService = ProductRemoteDataSource()
-            val productsRepository = ProductsServiceRepository(productRemoteDataService)
+            val productsRepository = ProductsRepositoryService(productRemoteDataService,productLocalDataService)
             val homeViewModel = HomeViewModel(productsRepository)
             HomeScreen(viewModel {
                 homeViewModel
@@ -42,8 +48,7 @@ fun Navigation(){
         }
         composable<CategoryDetail> {  backStackEntry ->
             val category = backStackEntry.toRoute<CategoryDetail>()
-            val productRemoteDataService = ProductRemoteDataSource()
-            val productsRepository = ProductsServiceRepository(productRemoteDataService)
+            val productsRepository = ProductsRepositoryService(productRemoteDataService,productLocalDataService)
             val vm = CategoryDetailViewModel(productsRepository)
             CategoriesDetailScreen(category.category,
                 viewModel {
@@ -52,8 +57,7 @@ fun Navigation(){
         }
         composable<ProductDetail> { backStackEntry ->
             val product = backStackEntry.toRoute<ProductDetail>()
-            val productRemoteDataService = ProductRemoteDataSource()
-            val productsRepository = ProductsServiceRepository(productRemoteDataService)
+            val productsRepository = ProductsRepositoryService(productRemoteDataService,productLocalDataService)
             val vm = ProductDetailViewModel(productsRepository)
             ProductDetailScreen(viewModel = viewModel {
                 vm

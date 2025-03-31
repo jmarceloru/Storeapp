@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -50,18 +52,22 @@ fun CategoriesDetailScreen(
     onClic: (Product) -> Unit
 ) {
     val categoryDetailState = rememberCategoryDetailState()
-    categoryDetailState.ShowScreen(categoryDetailState.ok) {
+    categoryDetailState.ShowScreen {
         vm.loadProducts(title)
     }
     Scaffold(
         topBar = {
-           AppBarScreenWithIcon(title = title, scrollBehavior = categoryDetailState.scrollBehavior,onBackPressed)
+            AppBarScreenWithIcon(
+                title = title,
+                scrollBehavior = categoryDetailState.scrollBehavior,
+                onBackPressed
+            )
         },
         modifier = Modifier.nestedScroll(categoryDetailState.scrollBehavior.nestedScrollConnection)
     ) { paddingValues ->
         val state by vm.state.collectAsState()
         if (state.loading) {
-           LoadingCircularIndicator(modifier = Modifier.padding(paddingValues))
+            LoadingCircularIndicator(modifier = Modifier.padding(paddingValues))
         }
         LazyVerticalGrid(
             columns = GridCells.Adaptive(150.dp),
@@ -100,14 +106,24 @@ fun ItemCardProduct(product: Product, onClic: () -> Unit) {
                     .height(200.dp)
             )
         }
-        Text(
-            text = "US$ ${product.price}",
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 4.dp),
-            textAlign = TextAlign.Center,
-            style = TextStyle(fontWeight = FontWeight.Bold),
-        )
+        Row(modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceAround) {
+            Text(
+                text = "US$ ${product.price}",
+                modifier = Modifier
+                    .padding(top = 4.dp),
+                textAlign = TextAlign.Center,
+                style = TextStyle(fontWeight = FontWeight.Bold),
+            )
+            Icon(
+                imageVector = if (product.favorite) {
+                    Icons.Default.Favorite
+                } else {
+                    Icons.Default.FavoriteBorder
+                },
+                contentDescription = stringResource(R.string.star),
+            )
+        }
         Row(
             modifier = Modifier.fillMaxSize()
         ) {

@@ -8,38 +8,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 class CategoryDetailState(
-    val scrollBehavior: TopAppBarScrollBehavior,
-    val ok: MutableState<Boolean>
-)  {
-
+    val scrollBehavior: TopAppBarScrollBehavior
+) {
     @Composable
-    fun ShowScreen(ok: MutableState<Boolean>, loadProducts: () -> Unit) {
-        LaunchedEffect(ok) {
-            if (!ok.value) {
-                ok.value = true
-                loadProducts()
-            }
+    fun ShowScreen(loadProducts: () -> Unit) {
+        LaunchedEffect(key1 = Unit) {
+            loadProducts()
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun rememberCategoryDetailState(
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-    ok: MutableState<Boolean> = mutableStateOf(false)
 ): CategoryDetailState {
-    return rememberSaveable(saver = CategoryDetailStateSaver) {
-        CategoryDetailState(scrollBehavior, ok)
+    return remember {
+        CategoryDetailState(scrollBehavior)
     }
 }
 
+/*
 @OptIn(ExperimentalMaterial3Api::class)
 val CategoryDetailStateSaver: Saver<CategoryDetailState, *> = Saver(
     save = { categDetailState ->
@@ -51,4 +48,4 @@ val CategoryDetailStateSaver: Saver<CategoryDetailState, *> = Saver(
             ok = mutableStateOf(it.second)
         )
     }
-)
+)*/

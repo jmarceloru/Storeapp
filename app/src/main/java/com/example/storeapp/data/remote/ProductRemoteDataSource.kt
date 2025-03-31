@@ -1,6 +1,6 @@
 package com.example.storeapp.data.remote
 
-import com.example.storeapp.data.models.ProductResult
+import com.example.storeapp.data.remote.models.ProductResult
 import com.example.storeapp.data.remote.retrofit.ProductClient
 
 class ProductRemoteDataSource : ProductRemoteDataService {

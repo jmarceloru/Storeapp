@@ -11,10 +11,9 @@ import androidx.compose.runtime.remember
 class ProductDetailState(
     val scrollBehavior: TopAppBarScrollBehavior
 ) {
-
     @Composable
-    fun ShowScreen(loadData: () -> Unit) {
-        LaunchedEffect(key1 = Unit) {
+    fun FetchProductData(loadData:() -> Unit ) {
+        LaunchedEffect(Unit) {
             loadData()
         }
     }
@@ -25,7 +24,7 @@ class ProductDetailState(
 fun rememberProductDetailState(
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 ): ProductDetailState {
-    return remember {
+    return remember{
         ProductDetailState(scrollBehavior)
     }
 }

@@ -7,5 +7,6 @@ data class Product(
     val image: String = "",
     val price: Double = 0.0,
     val rating: Rating = Rating(),
-    val title: String = ""
+    val title: String = "",
+    val favorite: Boolean = false
 )
