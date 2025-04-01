@@ -35,6 +35,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.example.storeapp.R
+import com.example.storeapp.Result
 import com.example.storeapp.domain.models.Category
 import com.example.storeapp.ui.screens.AppBarScreen
 import com.example.storeapp.ui.screens.LoadingCircularIndicator
@@ -56,22 +57,30 @@ fun HomeScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { paddingValues ->
         val state by homeViewModel.state.collectAsState()
-        state.let {
-            if (it.loading) {
+        when(state){
+            is Result.Error ->{
+                val errorState = state as Result.Error
+                Text(text = errorState.exception.message.toString(),
+                    color = Color.Red)
+            }
+            Result.Loading -> {
                 LoadingCircularIndicator(
                     modifier = Modifier
                         .padding(paddingValues)
                 )
             }
-        }
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(1),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            contentPadding = paddingValues
-        ) {
-            items(state.categories) { category->
-                ItemCardCategory(category = category, onClick = { onClick(category.title) })
+            is Result.Success -> {
+                val successState = state as Result.Success
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(1),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    contentPadding = paddingValues
+                ) {
+                    items(successState.data) { category->
+                        ItemCardCategory(category = category, onClick = { onClick(category.title) })
+                    }
+                }
             }
         }
     }

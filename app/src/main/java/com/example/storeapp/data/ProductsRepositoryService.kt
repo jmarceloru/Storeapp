@@ -24,9 +24,9 @@ class ProductsRepositoryService(
     private val productRemoteDataService: ProductRemoteDataService,
     private val productLocalDataService: ProductLocalDataService
 ) : ProductsRepository {
-    override fun fetchCategories(): Flow<List<Category>> {
-        return productLocalDataService.fetchCategories().onEach { categories->
-            if (categories.isEmpty()){
+    override fun fetchCategories(): Flow<List<Category>> =
+        productLocalDataService.fetchCategories().onEach { categories ->
+            if (categories.isEmpty()) {
                 val categoriesEntities = productRemoteDataService.fetchCategories().map {
                     CategoryEntity(
                         it,
@@ -36,7 +36,7 @@ class ProductsRepositoryService(
                 productLocalDataService.saveCategories(categoriesEntities)
             }
         }.map { it.map { c -> c.toDomain() } }
-    }
+
 
     /*    override fun fetchCategories(): Flow<List<Category>> {
            val categories: Flow<List<Category>> =
@@ -55,19 +55,18 @@ class ProductsRepositoryService(
            return categories
        }*/
 
-    override fun fetchProductsByCategory(category: String): Flow<List<Product>> {
-        return productLocalDataService.fetchProductsByCategory(category).onEach {
-            products->
-            if (products.isEmpty()){
-               val producstEntity = productRemoteDataService.fetchProductsByCategory(category).map {
-                   it.toProductEntity()
-               }
+    override fun fetchProductsByCategory(category: String): Flow<List<Product>> =
+        productLocalDataService.fetchProductsByCategory(category).onEach { products ->
+            if (products.isEmpty()) {
+                val producstEntity =
+                    productRemoteDataService.fetchProductsByCategory(category).map {
+                        it.toProductEntity()
+                    }
                 productLocalDataService.saveProducts(producstEntity)
             }
         }.map {
-            it.map { p->p.toDomain() }
+            it.map { p -> p.toDomain() }
         }
-    }
 
     /*    override fun fetchProductsByCategory(category: String): Flow<List<Product>> {
         val products: Flow<List<Product>> = productLocalDataService.fetchProductsByCategory(category).transform { products->

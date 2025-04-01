@@ -2,7 +2,11 @@ package com.example.storeapp.ui.screens.productdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.util.EMPTY_STRING_ARRAY
+import com.example.storeapp.Result
+import com.example.storeapp.domain.models.Product
 import com.example.storeapp.domain.repository.ProductsRepository
+import com.example.storeapp.ifSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,24 +17,27 @@ class ProductDetailViewModel(
     private val productsRepository: ProductsRepository
 ) : ViewModel() {
 
-    private var _state = MutableStateFlow(ProductDetailUiState())
-    val state: StateFlow<ProductDetailUiState> get() = _state.asStateFlow()
+    private var _state: MutableStateFlow<Result<Product>> = MutableStateFlow(Result.Loading)
+    val state: StateFlow<Result<Product>> get() = _state.asStateFlow()
 
     fun fetchProduct(idProduct: Int) {
         viewModelScope.launch {
-            _state.value = ProductDetailUiState(loading = true)
-            _state.value = ProductDetailUiState(
-                loading = false,
-                productsRepository.fetchProductById(idProduct)
-            )
+            try {
+                _state.value = Result.Success(productsRepository.fetchProductById(idProduct))
+            } catch (ex: Exception) {
+                _state.value = Result.Error(ex)
+            }
         }
     }
 
     fun onFavoriteClick() {
-        viewModelScope.launch {
-            _state.update {
-                it.copy(product = it.product.copy(favorite = !it.product.favorite)).also { productDetailState->
-                    productsRepository.updateProduct(productDetailState.product)
+        _state.value.ifSuccess { product ->
+            viewModelScope.launch {
+                _state.update {
+                    val p = product.copy(favorite = !product.favorite)
+                    Result.Success(p).also {
+                        productsRepository.updateProduct(p)
+                    }
                 }
             }
         }

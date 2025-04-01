@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.storeapp.R
+import com.example.storeapp.Result
+import com.example.storeapp.ifSuccess
 import com.example.storeapp.ui.screens.AppBarScreenWithIcon
 import com.example.storeapp.ui.screens.LoadingCircularIndicator
 import com.example.storeapp.ui.theme.colorRating
@@ -66,9 +68,14 @@ fun ProductDetailScreen(
         floatingActionButton = {
             FloatingActionButton(onClick = { viewModel.onFavoriteClick() }) {
                 Icon(
-                    imageVector = if (state.product.favorite) {
-                        Icons.Default.Favorite
-                    } else {
+                    imageVector = if (state is Result.Success){
+                        val succesState = state as Result.Success
+                        if (succesState.data.favorite){
+                            Icons.Default.Favorite
+                        }else{
+                            Icons.Default.FavoriteBorder
+                        }
+                    }else{
                         Icons.Default.FavoriteBorder
                     },
                     contentDescription = stringResource(id = R.string.cart)
@@ -76,83 +83,93 @@ fun ProductDetailScreen(
             }
         }
     ) { paddingValues ->
-        if (state.loading) {
-            LoadingCircularIndicator(modifier = Modifier.padding(paddingValues))
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .verticalScroll(rememberScrollState())
-            ) {
+        when (state) {
+            is Result.Error -> {
+                val errorState = state as Result.Error
                 Text(
-                    text = state.product.title,
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
+                    text = errorState.exception.message.toString(),
+                    color = Color.Red,
+                    modifier = Modifier.padding(paddingValues)
                 )
-                Box(
+            }
+            Result.Loading -> LoadingCircularIndicator(modifier = Modifier.padding(paddingValues))
+            is Result.Success -> {
+                val succesState = state as Result.Success
+                Column(
                     modifier = Modifier
-                        .background(Color.White)
-                        .padding(8.dp)
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    AsyncImage(
-                        model = state.product.image, contentDescription = state.product.title,
+                    Text(
+                        text = succesState.data.title,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp)
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
                     )
-                }
-                Text(
-                    text = "US$ ${state.product.price}",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-                Row(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Text(text = "${state.product.rating.count}+sold")
-                    Column {
-                        Row {
-                            Text(
-                                text = state.product.rating.rate.toString(),
-                            )
-                            var isHalfStar = (state.product.rating.rate.rem(1)) != 0.0
-                            for (i in 1..5) {
-                                Icon(
-                                    tint = colorRating,
-                                    contentDescription = stringResource(R.string.star),
-                                    imageVector = if (i <= state.product.rating.rate) {
-                                        Icons.Rounded.Star
-                                    } else {
-                                        if (isHalfStar) {
-                                            isHalfStar = false
-                                            ImageVector.vectorResource(id = R.drawable.round_star_half_24)
-                                        } else {
-                                            ImageVector.vectorResource(id = R.drawable.outline_star_border_24)
-                                        }
-                                    }
+                    Box(
+                        modifier = Modifier
+                            .background(Color.White)
+                            .padding(8.dp)
+                    ) {
+                        AsyncImage(
+                            model = succesState.data.image, contentDescription = succesState.data.title,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(300.dp)
+                        )
+                    }
+                    Text(
+                        text = "US$ ${succesState.data.price}",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                    Row(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Text(text = "${succesState.data.rating.count}+sold")
+                        Column {
+                            Row {
+                                Text(
+                                    text = succesState.data.rating.rate.toString(),
                                 )
+                                var isHalfStar = (succesState.data.rating.rate.rem(1)) != 0.0
+                                for (i in 1..5) {
+                                    Icon(
+                                        tint = colorRating,
+                                        contentDescription = stringResource(R.string.star),
+                                        imageVector = if (i <= succesState.data.rating.rate) {
+                                            Icons.Rounded.Star
+                                        } else {
+                                            if (isHalfStar) {
+                                                isHalfStar = false
+                                                ImageVector.vectorResource(id = R.drawable.round_star_half_24)
+                                            } else {
+                                                ImageVector.vectorResource(id = R.drawable.outline_star_border_24)
+                                            }
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
+                    Text(
+                        text = succesState.data.description,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Justify
+                    )
                 }
-                Text(
-                    text = state.product.description,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Justify
-                )
             }
         }
     }
