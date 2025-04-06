@@ -54,7 +54,7 @@ fun ProductDetailScreen(
     val state by viewModel.state.collectAsState()
     val productDetailState = rememberProductDetailState()
     productDetailState.FetchProductData {
-        viewModel.fetchProduct(idProduct)
+        viewModel.fetchProductById(idProduct)
     }
     Scaffold(
         topBar = {

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.storeapp.Result
 import com.example.storeapp.domain.models.Category
 import com.example.storeapp.domain.repository.ProductsRepository
+import com.example.storeapp.domain.usecases.FetchCategoriesUseCase
 import com.example.storeapp.ui.Home
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,13 +18,13 @@ import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-   productsRepository : ProductsRepository
+   fetchCategoriesUseCase: FetchCategoriesUseCase
 ) : ViewModel(){
 
   //  private var _state = MutableStateFlow(HomeUiState())
     //val state: StateFlow<HomeUiState> get() = _state.asStateFlow()
 
-    val state: StateFlow<Result<List<Category>>> = productsRepository.fetchCategories()
+    val state: StateFlow<Result<List<Category>>> = fetchCategoriesUseCase()
         .map<List<Category>,Result<List<Category>> > { Result.Success(it) }
         .catch {emit(Result.Error(it)) }
         .stateIn(

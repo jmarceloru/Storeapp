@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.storeapp.Result
 import com.example.storeapp.domain.models.Product
-import com.example.storeapp.domain.repository.ProductsRepository
+import com.example.storeapp.domain.usecases.FetchProductsByCategoryUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 
 class CategoryDetailViewModel(
-    private val productsRepository: ProductsRepository
+    private val fetchProductsByCategoryUseCase: FetchProductsByCategoryUseCase
 ) : ViewModel() {
 
     private var _state: MutableStateFlow<Result<List<Product>>> =
@@ -22,7 +22,7 @@ class CategoryDetailViewModel(
     fun loadProducts(category: String) {
         viewModelScope.launch {
             try {
-                productsRepository.fetchProductsByCategory(category).collect {
+                fetchProductsByCategoryUseCase(category).collect {
                     _state.value = Result.Success(it)
                 }
             }catch (ex: Exception){

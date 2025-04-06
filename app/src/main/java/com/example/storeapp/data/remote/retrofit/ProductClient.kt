@@ -13,7 +13,7 @@ object ProductClient{
         ignoreUnknownKeys = true
     }
 
-    val instance = Retrofit
+    val instance: ProductService = Retrofit
         .Builder()
         .baseUrl("https://fakestoreapi.com/")
         .addConverterFactory(json.asConverterFactory(FORMAT.toMediaType()))

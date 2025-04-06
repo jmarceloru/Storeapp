@@ -6,7 +6,6 @@ import com.example.storeapp.data.local.entities.Rating
 import com.example.storeapp.data.local.entities.toDomain
 import com.example.storeapp.data.remote.models.Categories
 import com.example.storeapp.data.remote.ProductRemoteDataService
-import com.example.storeapp.data.remote.models.toEntityRating
 import com.example.storeapp.data.remote.models.toProductEntity
 import com.example.storeapp.domain.models.Category
 import com.example.storeapp.domain.repository.ProductsRepository
@@ -15,9 +14,7 @@ import com.example.storeapp.data.local.entities.Product as ProductEntity
 import com.example.storeapp.domain.models.Product
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.transform
 
 
 class ProductsRepositoryService(

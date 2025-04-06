@@ -11,6 +11,11 @@ import com.example.storeapp.StoreApp
 import com.example.storeapp.data.ProductsRepositoryService
 import com.example.storeapp.data.local.ProductLocalDataSource
 import com.example.storeapp.data.remote.ProductRemoteDataSource
+import com.example.storeapp.data.remote.retrofit.ProductClient
+import com.example.storeapp.domain.usecases.FavoriteClickUseCase
+import com.example.storeapp.domain.usecases.FetchCategoriesUseCase
+import com.example.storeapp.domain.usecases.FetchProductByIdUseCase
+import com.example.storeapp.domain.usecases.FetchProductsByCategoryUseCase
 import com.example.storeapp.ui.screens.categoriesdetail.CategoriesDetailScreen
 import com.example.storeapp.ui.screens.categoriesdetail.CategoryDetailViewModel
 import com.example.storeapp.ui.screens.home.HomeScreen
@@ -33,13 +38,14 @@ fun Navigation(){
     val navController = rememberNavController()
 
     val app = LocalContext.current.applicationContext as StoreApp
-    val productRemoteDataService = ProductRemoteDataSource()
+    val productRemoteDataService = ProductRemoteDataSource(ProductClient.instance)
     val productLocalDataService = ProductLocalDataSource(app.db.categoryDao(),app.db.productDao())
 
     NavHost(navController = navController, startDestination = Home) {
         composable<Home> {
             val productsRepository = ProductsRepositoryService(productRemoteDataService,productLocalDataService)
-            val homeViewModel = HomeViewModel(productsRepository)
+            val fetchCategoriesUseCase = FetchCategoriesUseCase(productsRepository)
+            val homeViewModel = HomeViewModel(fetchCategoriesUseCase)
             HomeScreen(viewModel {
                 homeViewModel
             }){
@@ -49,7 +55,8 @@ fun Navigation(){
         composable<CategoryDetail> {  backStackEntry ->
             val category = backStackEntry.toRoute<CategoryDetail>()
             val productsRepository = ProductsRepositoryService(productRemoteDataService,productLocalDataService)
-            val vm = CategoryDetailViewModel(productsRepository)
+            val fetchProductsByCategoryUseCase = FetchProductsByCategoryUseCase(productsRepository)
+            val vm = CategoryDetailViewModel(fetchProductsByCategoryUseCase)
             CategoriesDetailScreen(category.category,
                 viewModel {
                     vm
@@ -58,7 +65,9 @@ fun Navigation(){
         composable<ProductDetail> { backStackEntry ->
             val product = backStackEntry.toRoute<ProductDetail>()
             val productsRepository = ProductsRepositoryService(productRemoteDataService,productLocalDataService)
-            val vm = ProductDetailViewModel(productsRepository)
+            val fetchProductByIdUseCase = FetchProductByIdUseCase(productsRepository)
+            val favoriteClickUseCase = FavoriteClickUseCase(productsRepository)
+            val vm = ProductDetailViewModel(fetchProductByIdUseCase,favoriteClickUseCase)
             ProductDetailScreen(viewModel = viewModel {
                 vm
             }, idProduct = product.id) {
