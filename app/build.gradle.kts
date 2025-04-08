@@ -53,7 +53,9 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation(project(":framework"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -62,21 +64,18 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    //room
+    implementation(libs.androidx.room)
+    ksp(libs.androidx.room.compiler)
+    //kotlinx serialization
+    implementation(libs.kotlinx.serialization.json)
     //coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
-    //retrofit
-    implementation(libs.retrofit)
-    implementation(libs.converter.kotlinx.serialization)
-    //kotlinx serialization
-    implementation(libs.kotlinx.serialization.json)
     //navigation
     implementation(libs.androidx.navigation.compose)
     //runtime livedata
     implementation(libs.androidx.runtime.livedata)
-    //room
-    implementation(libs.androidx.room)
-    ksp(libs.androidx.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

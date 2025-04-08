@@ -3,8 +3,8 @@ package com.example.storeapp.ui.screens.categoriesdetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.storeapp.Result
-import com.example.storeapp.domain.models.Product
-import com.example.storeapp.domain.usecases.FetchProductsByCategoryUseCase
+import com.example.domain.models.Product
+import com.example.domain.usecases.FetchProductsByCategoryUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

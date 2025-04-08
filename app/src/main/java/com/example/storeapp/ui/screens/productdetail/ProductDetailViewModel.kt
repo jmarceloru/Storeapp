@@ -3,9 +3,9 @@ package com.example.storeapp.ui.screens.productdetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.storeapp.Result
-import com.example.storeapp.domain.models.Product
-import com.example.storeapp.domain.usecases.FavoriteClickUseCase
-import com.example.storeapp.domain.usecases.FetchProductByIdUseCase
+import com.example.domain.models.Product
+import com.example.domain.usecases.FavoriteClickUseCase
+import com.example.domain.usecases.FetchProductByIdUseCase
 import com.example.storeapp.ifSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

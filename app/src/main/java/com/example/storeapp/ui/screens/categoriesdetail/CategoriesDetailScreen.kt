@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.storeapp.R
 import com.example.storeapp.Result
-import com.example.storeapp.domain.models.Product
+import com.example.domain.models.Product
 import com.example.storeapp.ui.screens.AppBarScreenWithIcon
 import com.example.storeapp.ui.screens.LoadingCircularIndicator
 import com.example.storeapp.ui.theme.colorRating

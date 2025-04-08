@@ -1,6 +1,6 @@
 package com.example.storeapp.ui.screens.categoriesdetail
 
-import com.example.storeapp.domain.models.Product
+import com.example.domain.models.Product
 
 data class CategoryDetailUiState(
     val loading: Boolean = false,

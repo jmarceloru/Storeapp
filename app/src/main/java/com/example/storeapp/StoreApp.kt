@@ -1,17 +1,17 @@
 package com.example.storeapp
 
 import android.app.Application
-import androidx.room.Room
-import com.example.storeapp.data.local.database.StoreDatabase
+import com.example.framework.local.CreateDatabaseService
+import com.example.framework.local.database.StoreDatabase
 
 class StoreApp : Application() {
 
+    private val createDatabase = CreateDatabaseService(this)
     lateinit var db: StoreDatabase
         private set
 
     override fun onCreate() {
         super.onCreate()
-        db = Room.databaseBuilder(this, StoreDatabase::class.java, "store-db")
-            .build()
+        db = createDatabase.createDatabase()
     }
 }

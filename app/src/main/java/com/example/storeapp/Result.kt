@@ -1,7 +1,5 @@
 package com.example.storeapp
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 sealed interface Result <out T>{
     data class Success<T>(val data: T):Result<T>

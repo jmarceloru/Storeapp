@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "StoreApp"
 include(":app")
- 
+include(":domain")
+include(":data")
+include(":framework")

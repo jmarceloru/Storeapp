@@ -36,9 +36,10 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.example.storeapp.R
 import com.example.storeapp.Result
-import com.example.storeapp.domain.models.Category
+import com.example.domain.models.Category
 import com.example.storeapp.ui.screens.AppBarScreen
 import com.example.storeapp.ui.screens.LoadingCircularIndicator
+import com.example.storeapp.ui.screens.home.models.CategoryModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,7 +89,7 @@ fun HomeScreen(
 
 @Composable
 fun ItemCardCategory(
-    category: Category,
+    category: CategoryModel,
     onClick: () -> Unit
 ) {
     Card(

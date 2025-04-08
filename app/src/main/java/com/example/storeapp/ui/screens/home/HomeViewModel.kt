@@ -3,19 +3,16 @@ package com.example.storeapp.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.storeapp.Result
-import com.example.storeapp.domain.models.Category
-import com.example.storeapp.domain.repository.ProductsRepository
-import com.example.storeapp.domain.usecases.FetchCategoriesUseCase
-import com.example.storeapp.ui.Home
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.domain.models.Category
+import com.example.domain.usecases.FetchCategoriesUseCase
+import com.example.storeapp.R
+import com.example.storeapp.ui.screens.home.models.Categories
+import com.example.storeapp.ui.screens.home.models.CategoryModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.transform
-import kotlinx.coroutines.launch
 
 class HomeViewModel(
    fetchCategoriesUseCase: FetchCategoriesUseCase
@@ -24,14 +21,28 @@ class HomeViewModel(
   //  private var _state = MutableStateFlow(HomeUiState())
     //val state: StateFlow<HomeUiState> get() = _state.asStateFlow()
 
-    val state: StateFlow<Result<List<Category>>> = fetchCategoriesUseCase()
-        .map<List<Category>,Result<List<Category>> > { Result.Success(it) }
+    val state: StateFlow<Result<List<CategoryModel>>> = fetchCategoriesUseCase()
+        .map<List<Category>,Result<List<CategoryModel>> > { Result.Success(it.map { cat->
+            CategoryModel(
+                cat.title,
+                getImage(cat.title)
+            )
+        }) }
         .catch {emit(Result.Error(it)) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = Result.Loading
         )
+
+    private fun getImage(title: String): Int =
+        when (title) {
+            Categories.Electronics.title -> R.drawable.electronics
+            Categories.Jewerly.title -> R.drawable.jewelery
+            Categories.MenClothing.title -> R.drawable.menclothes
+            Categories.WomenClothing.title -> R.drawable.womenclotehs
+            else -> R.drawable.notfound
+        }
 
     /*init {
         viewModelScope.launch {
