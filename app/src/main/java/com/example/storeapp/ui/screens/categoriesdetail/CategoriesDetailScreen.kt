@@ -38,11 +38,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.storeapp.R
-import com.example.storeapp.Result
+import com.example.domain.models.Result
 import com.example.domain.models.Product
 import com.example.storeapp.ui.screens.AppBarScreenWithIcon
 import com.example.storeapp.ui.screens.LoadingCircularIndicator
 import com.example.storeapp.ui.theme.colorRating
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

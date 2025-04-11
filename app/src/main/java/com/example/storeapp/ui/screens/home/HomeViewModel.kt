@@ -2,7 +2,7 @@ package com.example.storeapp.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.storeapp.Result
+import com.example.domain.models.Result
 import com.example.domain.models.Category
 import com.example.domain.usecases.FetchCategoriesUseCase
 import com.example.storeapp.R
@@ -22,7 +22,7 @@ class HomeViewModel(
     //val state: StateFlow<HomeUiState> get() = _state.asStateFlow()
 
     val state: StateFlow<Result<List<CategoryModel>>> = fetchCategoriesUseCase()
-        .map<List<Category>,Result<List<CategoryModel>> > { Result.Success(it.map { cat->
+        .map<List<Category>, Result<List<CategoryModel>>> { Result.Success(it.map { cat->
             CategoryModel(
                 cat.title,
                 getImage(cat.title)

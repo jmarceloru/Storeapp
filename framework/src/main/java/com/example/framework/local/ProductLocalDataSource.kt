@@ -12,7 +12,7 @@ import com.example.framework.local.entities.toProductEntitty
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class ProductLocalDataSource(
+internal class ProductLocalDataSource(
     private val categoryDao: CategoryDao,
     private val productDao: ProductDao
 ) : ProductLocalDataService {

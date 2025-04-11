@@ -35,8 +35,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import com.example.storeapp.R
-import com.example.storeapp.Result
-import com.example.domain.models.Category
+import com.example.domain.models.Result
 import com.example.storeapp.ui.screens.AppBarScreen
 import com.example.storeapp.ui.screens.LoadingCircularIndicator
 import com.example.storeapp.ui.screens.home.models.CategoryModel

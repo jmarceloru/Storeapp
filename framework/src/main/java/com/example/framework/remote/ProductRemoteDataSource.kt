@@ -6,7 +6,7 @@ import com.example.data.models.ProductData
 import com.example.framework.remote.models.toProductData
 import com.example.framework.remote.retrofit.ProductService
 
-class ProductRemoteDataSource(
+internal class ProductRemoteDataSource(
     private val productService: ProductService
 ) : ProductRemoteDataService {
 

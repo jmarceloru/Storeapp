@@ -11,4 +11,7 @@ java {
 dependencies {
     implementation(project(":domain"))
     implementation(libs.kotlinx.coroutines.core)
+    //koin
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
 }

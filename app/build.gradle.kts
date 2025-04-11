@@ -76,6 +76,9 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     //runtime livedata
     implementation(libs.androidx.runtime.livedata)
+    //koin
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

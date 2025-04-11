@@ -46,6 +46,9 @@ dependencies {
     implementation(libs.okhttp)
     //kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
+    //koin
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
