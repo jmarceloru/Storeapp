@@ -43,7 +43,6 @@ import com.example.domain.models.Product
 import com.example.storeapp.ui.screens.AppBarScreenWithIcon
 import com.example.storeapp.ui.screens.LoadingCircularIndicator
 import com.example.storeapp.ui.theme.colorRating
-import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
