@@ -13,4 +13,7 @@ dependencies {
     //koin
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(kotlin("test"))
 }
