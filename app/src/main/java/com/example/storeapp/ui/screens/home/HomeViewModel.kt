@@ -15,20 +15,19 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class HomeViewModel(
-   fetchCategoriesUseCase: FetchCategoriesUseCase
-) : ViewModel(){
-
-  //  private var _state = MutableStateFlow(HomeUiState())
-    //val state: StateFlow<HomeUiState> get() = _state.asStateFlow()
+    fetchCategoriesUseCase: FetchCategoriesUseCase
+) : ViewModel() {
 
     val state: StateFlow<Result<List<CategoryModel>>> = fetchCategoriesUseCase()
-        .map<List<Category>, Result<List<CategoryModel>>> { Result.Success(it.map { cat->
-            CategoryModel(
-                cat.title,
-                getImage(cat.title)
-            )
-        }) }
-        .catch {emit(Result.Error(it)) }
+        .map<List<Category>, Result<List<CategoryModel>>> {
+            Result.Success(it.map { cat ->
+                CategoryModel(
+                    cat.title,
+                    getImage(cat.title)
+                )
+            })
+        }
+        .catch { emit(Result.Error(it)) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),

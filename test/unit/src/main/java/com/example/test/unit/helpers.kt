@@ -1,4 +1,4 @@
-package com.example.domain.usecases
+package com.example.test.unit
 
 import com.example.domain.models.Category
 import com.example.domain.models.Product

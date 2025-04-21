@@ -1,6 +1,7 @@
 package com.example.domain.usecases
 
 import com.example.domain.repository.ProductsRepository
+import com.example.test.unit.sampleCategories
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertEquals
 import org.junit.Test

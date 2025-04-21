@@ -22,6 +22,7 @@ appcompat = "1.7.0"
 material = "1.12.0"
 koin = "4.0.4"
 mockitoKotlin =  "5.3.1"
+turbine = "1.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,6 +57,8 @@ koin-core = {group = "io.insert-koin", name = "koin-core"}
 koin-android = {group = "io.insert-koin", name = "koin-android"}
 koin-compose = {group = "io.insert-koin",name = "koin-androidx-compose"}
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitoKotlin" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
 
 [plugins]

@@ -1,6 +1,7 @@
 package com.example.domain.usecases
 
 import com.example.domain.repository.ProductsRepository
+import com.example.test.unit.sampleProduct
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.kotlin.doReturn
