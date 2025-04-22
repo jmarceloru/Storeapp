@@ -4,12 +4,7 @@ import app.cash.turbine.test
 import com.example.domain.models.Result
 import com.example.domain.usecases.FetchCategoriesUseCase
 import com.example.test.rule.CoroutinesTestRule
-import com.example.test.unit.sampleCategories
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -19,7 +14,6 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.whenever
 import kotlin.test.assertEquals
-
 
 @RunWith(MockitoJUnitRunner::class)
 class HomeViewModelTest {
@@ -37,14 +31,16 @@ class HomeViewModelTest {
         viewModel = HomeViewModel(fetchCategoriesUseCase)
     }
 
- /*   @Test
-    fun `Error is propagated when request fails`(): Unit = runTest{
+    @Test
+    fun `Error is propagated when request fails`() = runTest{
         val error = RuntimeException("Error")
-        whenever(fetchCategoriesUseCase()).thenThrow(error)
+        whenever(fetchCategoriesUseCase.invoke()).thenReturn(flow { throw error})
+
+        viewModel = HomeViewModel(fetchCategoriesUseCase)
 
         viewModel.state.test {
             assertEquals(Result.Loading, awaitItem())
             assertEquals(Result.Error(error), awaitItem())
         }
-    }*/
+    }
 }

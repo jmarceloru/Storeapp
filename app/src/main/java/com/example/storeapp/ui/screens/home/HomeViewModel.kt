@@ -34,7 +34,7 @@ class HomeViewModel(
             initialValue = Result.Loading
         )
 
-    private fun getImage(title: String): Int =
+    fun getImage(title: String): Int =
         when (title) {
             Categories.Electronics.title -> R.drawable.electronics
             Categories.Jewerly.title -> R.drawable.jewelery

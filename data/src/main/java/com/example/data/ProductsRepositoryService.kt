@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 
-internal class ProductsRepositoryService(
+class ProductsRepositoryService(
     private val productRemoteDataService: ProductRemoteDataService,
     private val productLocalDataService: ProductLocalDataService
 ) : ProductsRepository {
